@@ -2,6 +2,14 @@
   "name": "ascii-art-maker",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "preinstall": "npm run build:wasm",
+    "build:wasm": "emcc -lembind -O2 -s MODULARIZE=1 -s ENVIRONMENT='web' src/art-maker/art-maker.cpp -o src/art-maker/art-maker.wrapper.js -s EXPORTED_RUNTIME_METHODS=FS && node tools/move-file.js src/art-maker/art-maker.wrapper.wasm public/art-maker.wrapper.wasm && node tools/disable-eslint-file.js src/art-maker/art-maker.wrapper.js"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -11,13 +19,13 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "preinstall": "npm run build:wasm",
-    "build:wasm": "emcc -lembind -O2 -s MODULARIZE=1 -s FORCE_FILESYSTEM=1 -s ENVIRONMENT='web' src/image-converter/hello_world.cpp -o src/image-converter/hello_world.js -s EXPORTED_RUNTIME_METHODS=FS && node tools/move-file.js src/image-converter/hello_world.wasm public/hello_world.wasm && node tools/disable-eslint-file.js src/image-converter/hello_world.js"
+  "devDependencies": {
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.0.6",
+    "@types/node-fetch": "^2.6.2",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "typescript": "^4.7.4"
   },
   "eslintConfig": {
     "extends": [
@@ -36,12 +44,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/jest": "^28.1.6",
-    "@types/node": "^18.0.6",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "typescript": "^4.7.4"
   }
 }
