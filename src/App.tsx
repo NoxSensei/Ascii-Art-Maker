@@ -2,10 +2,10 @@ import {Component, ChangeEvent} from "react";
 import {ArtMakerService} from "./art-maker/art-maker.service";
 
 export class App extends Component {
-    private imageConverterService?: ArtMakerService;
+    private artMakerService?: ArtMakerService;
 
     public async componentDidMount() {
-        this.imageConverterService = await ArtMakerService.createInstance();
+        this.artMakerService = await ArtMakerService.createInstance();
         this.setState({module});
     }
 
@@ -17,7 +17,7 @@ export class App extends Component {
 
         // TODO handle multiple files
         const file = files[0] as File;
-        await this.imageConverterService?.formatToAscii(file);
+        await this.artMakerService?.formatToAscii(file);
     }
 
     render() {

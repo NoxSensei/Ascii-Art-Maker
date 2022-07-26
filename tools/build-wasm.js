@@ -1,0 +1,47 @@
+import {execSync} from "child_process";
+import fs from "fs";
+
+console.log("Starting build")
+
+const fileName = "art-maker.wrapper";
+const parameters = [
+    // Invokes emcc bind option - required by EMSCRIPTEN_BINDINGS C++ section
+    "-lembind",
+
+    // Optimize output file
+    "-O2",
+
+    // Modularize output JavaScript file containing only web specific methods
+    // These 2 options are required for proper module import in React component
+    "-s MODULARIZE=1",
+    "-s ENVIRONMENT='web'",
+
+    // Allow using virtual file system in JavaScript code
+    "-s EXPORTED_RUNTIME_METHODS=FS",
+
+    // Source file
+    `src/art-maker/art-maker.cpp`,
+
+    // Output file name (will create .js and .wasm)
+    `-o src/art-maker/${fileName}.js`
+];
+
+const parametersString = parameters.join(" ");
+execSync(`emcc ${parametersString}`);
+
+// Add eslint ignore to generated JavaScript file
+
+const fileToChange = `src/art-maker/${fileName}.js`;
+const text = "/* eslint-disable */\n";
+const data = fs.readFileSync(fileToChange);
+
+const fd = fs.openSync(fileToChange, 'w+');
+fs.writeSync(fd, Buffer.from(text), 0, text.length, 0);
+fs.writeSync(fd, data, 0, data.length, text.length);
+fs.closeSync(fd);
+
+// Move wasm to public
+
+fs.renameSync(`src/art-maker/${fileName}.wasm`, `public/${fileName}.wasm`);
+
+console.log("Build completed");

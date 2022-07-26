@@ -8,7 +8,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "preinstall": "npm run build:wasm",
-    "build:wasm": "emcc -lembind -O2 -s MODULARIZE=1 -s ENVIRONMENT='web' src/art-maker/art-maker.cpp -o src/art-maker/art-maker.wrapper.js -s EXPORTED_RUNTIME_METHODS=FS && node tools/move-file.js src/art-maker/art-maker.wrapper.wasm public/art-maker.wrapper.wasm && node tools/disable-eslint-file.js src/art-maker/art-maker.wrapper.js"
+    "build:wasm": "node tools/build-wasm.js"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
