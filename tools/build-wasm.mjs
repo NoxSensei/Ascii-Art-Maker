@@ -19,8 +19,21 @@ const parameters = [
     // Allow using virtual file system in JavaScript code
     "-s EXPORTED_RUNTIME_METHODS=FS",
 
+    // Import SDL2 library from common emscripten ports
+    "-s USE_SDL=2",
+    "-s USE_SDL_IMAGE=2",
+    // TODO test on linux (probably have to change "["bmp", "png"]" to '["bmp", "png"]')
+    `-s SDL2_IMAGE_FORMATS="["bmp", "png"]"`,
+
+    // Required for handling large files - can be improved by implementing streaming
+    "-s ALLOW_MEMORY_GROWTH=1",
+
+    // Specify C++17 mode
+    "-std=c++1z",
+
     // Source file
     `src/art-maker/art-maker.cpp`,
+    `src/art-maker/color-hsl.cpp`,
 
     // Output file name (will create .js and .wasm)
     `-o src/art-maker/${fileName}.js`

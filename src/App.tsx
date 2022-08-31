@@ -1,12 +1,16 @@
-import {Component, ChangeEvent} from "react";
+import {ChangeEvent, Component} from "react";
 import {ArtMakerService} from "./art-maker/art-maker.service";
 
-export class App extends Component {
-    private artMakerService?: ArtMakerService;
+export class App extends Component<unknown, { data?: string }> {
+    private artMakerService!: ArtMakerService;
+
+    constructor(props: unknown) {
+        super(props);
+        this.state = {};
+    }
 
     public async componentDidMount() {
         this.artMakerService = await ArtMakerService.createInstance();
-        this.setState({module});
     }
 
     private fileInputChangedHandler = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -15,14 +19,24 @@ export class App extends Component {
             return;
         }
 
-        // TODO handle multiple files
         const file = files[0] as File;
-        await this.artMakerService?.formatToAscii(file);
+        const data = await this.artMakerService.formatToAscii(file, 5); // TODO allow sending ints
+        this.setState({data});
+
+        // Clear file input selection
+        event.target.value = "";
     }
 
     render() {
-        return <div>
+        return <>
             <input type="file" onChange={this.fileInputChangedHandler}/>
-        </div>
+            <br/>
+            <span style={{
+                whiteSpace: "pre-line",
+                fontFamily: "monospace"
+            }}>
+                {this.state.data}
+            </span>
+        </>
     }
 }

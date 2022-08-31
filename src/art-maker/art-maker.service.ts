@@ -15,28 +15,43 @@ export class ArtMakerService {
         return new ArtMakerService(module);
     }
 
-    public async formatToAscii(file: File) {
-        const inputFileName = "tmpFileName.jpeg";
-        const outputFileName = "tmpFileName.output.txt";
+    public async formatToAscii(file: File, scale: number) {
+        const inputFileName = "art-input";
+        const outputFileName = "art-output";
+        await this.storeInputFile(inputFileName, file);
+        this.runImageConverter(inputFileName, outputFileName, scale);
 
-        const stream =  this.module.FS.open(inputFileName, 'w');
+        const data = this.module.FS.readFile(outputFileName, { encoding: 'utf8' });
+        this.module.FS.unlink(inputFileName);
+        this.module.FS.unlink(outputFileName);
+
+        return data;
+    }
+
+    // TODO add error popup
+    private runImageConverter(inputFileName: string, outputFileName: string, scale: number) {
+        try {
+            // This method is defined in cpp EMSCRIPTEN_BINDINGS section
+            this.module.run(inputFileName, outputFileName, scale);
+        } catch (errorPtr) {
+            const message = this.module.extractExceptionMessage(errorPtr);
+            throw new Error(message);
+        }
+    }
+
+    private async storeInputFile(inputFileName: string, file: File) {
+        const stream = this.module.FS.open(inputFileName, 'w');
         const fileStream = file.stream() as unknown as ReadableStream<Uint8Array>;
         const reader = fileStream.getReader()
 
-        let offset = 0;
         while (true) {
             const chunk = await reader.read();
             if (chunk.done) {
                 break;
             }
 
-            this.module.FS.write(stream, chunk.value, offset, chunk.value.length);
-            offset = chunk.value.length + 1;
+            this.module.FS.write(stream, chunk.value, 0, chunk.value.length);
         }
-
         this.module.FS.close(stream);
-
-        // This method is defined in cpp EMSCRIPTEN_BINDINGS section
-        this.module.smthFile(inputFileName, outputFileName);
     }
 }
