@@ -15,11 +15,11 @@ export class ArtMakerService {
         return new ArtMakerService(module);
     }
 
-    public async formatToAscii(file: File, scale: number) {
+    public async formatToAscii(file: File, reduceScaleByTimes: number) {
         const inputFileName = "art-input";
         const outputFileName = "art-output";
         await this.storeInputFile(inputFileName, file);
-        this.runImageConverter(inputFileName, outputFileName, scale);
+        this.runImageConverter(inputFileName, outputFileName, reduceScaleByTimes);
 
         const data = this.module.FS.readFile(outputFileName, { encoding: 'utf8' });
         this.module.FS.unlink(inputFileName);
@@ -28,11 +28,10 @@ export class ArtMakerService {
         return data;
     }
 
-    // TODO add error popup
-    private runImageConverter(inputFileName: string, outputFileName: string, scale: number) {
+    private runImageConverter(inputFileName: string, outputFileName: string, reduceScaleByTimes: number) {
         try {
             // This method is defined in cpp EMSCRIPTEN_BINDINGS section
-            this.module.run(inputFileName, outputFileName, scale);
+            this.module.run(inputFileName, outputFileName, reduceScaleByTimes);
         } catch (errorPtr) {
             const message = this.module.extractExceptionMessage(errorPtr);
             throw new Error(message);
