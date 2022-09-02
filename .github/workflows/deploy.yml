@@ -6,15 +6,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-#      - name: Setup Emscripten toolchain
-#        uses: mymindstorm/setup-emsdk@v11
-#      - name: Setup Node.js environment
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 16
+      - name: Fetch repo data
+        uses: actions/checkout@v3
+      - name: Setup Emscripten toolchain
+        uses: mymindstorm/setup-emsdk@v11
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - run: |
           ls
-#          npm run build:wasm
-#          npm run build
-#      - name: Deploy to GitHub Pages
-#        uses: crazy-max/ghaction-github-pages@v3.0.0
+          npm run build:wasm
+          npm run build
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v3.0.0
