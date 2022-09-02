@@ -16,10 +16,12 @@ jobs:
           node-version: 16
       - name: Build
         run: |
-          npm ci --production
+          npm ci --omit=dev
           npm run build:wasm
           npm run build
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v3.0.0
         with:
           build_dir: public
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
