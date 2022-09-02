@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:wasm": "node tools/build-wasm.mjs",
+    "build:ui": "react-scripts build",
+    "build": "npm run build:wasm && npm run build:ui",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "preinstall": "npm run build:wasm",
-    "build:wasm": "node tools/build-wasm.mjs"
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
