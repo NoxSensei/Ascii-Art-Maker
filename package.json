@@ -2,6 +2,7 @@
   "name": "ascii-art-maker",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "scripts": {
     "preinstall": "npm run build:wasm",
     "start": "react-scripts start",
