@@ -14,8 +14,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: |
-          ls
+      - name: Build
+        run: |
+          npm ci --production
           npm run build:wasm
           npm run build
       - name: Deploy to GitHub Pages
