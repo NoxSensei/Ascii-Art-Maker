@@ -20,12 +20,9 @@ jobs:
         run: |
           npm ci --omit=dev
           npm run build:ui
-          pwd
-          ls
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v3.0.0
         with:
-          target_branch: setup-cicd
           build_dir: build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
