@@ -13,5 +13,8 @@ jobs:
         with:
           node-version: 16
       - run: |
+          ls
           npm run build:wasm
           npm run build
+      - name: GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v3.0.0
