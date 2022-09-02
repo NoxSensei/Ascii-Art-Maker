@@ -20,7 +20,9 @@ jobs:
         run: |
           npm ci --omit=dev
           npm run build:ui
-      - name: Deploy to GitHub Pages
+          pwd
+          ls
+      - name: Deploy
         uses: crazy-max/ghaction-github-pages@v3.0.0
         with:
           build_dir: build
