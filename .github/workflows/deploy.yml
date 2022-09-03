@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ "master", "setup-cicd" ]
+    branches: [ "master" ]
 
 concurrency:
   group: "pages"
