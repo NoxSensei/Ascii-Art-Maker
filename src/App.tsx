@@ -26,6 +26,7 @@ export class App extends Component<unknown, AppState> {
     }
 
     public async componentDidMount() {
+        document.title = "Ascii Art Maker";
         this.artMakerService = await ArtMakerService.createInstance();
     }
 
