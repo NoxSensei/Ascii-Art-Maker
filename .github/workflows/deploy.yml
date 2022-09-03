@@ -1,0 +1,50 @@
+on:
+  push:
+    branches: [ "master" ]
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull repository data
+        uses: actions/checkout@v3
+      - name: Setup Emscripten toolchain
+        uses: mymindstorm/setup-emsdk@v11
+        with:
+          version: 3.1.20
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.17.0
+      - name: Build wasm files
+        run: npm run build:wasm
+      - name: Build ui
+        run: |
+          npm ci --omit=dev
+          npm run build:ui
+      - uses: actions/upload-artifact@master
+        name: Push build data
+        with:
+          name: build-data
+          path: build
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/download-artifact@master
+        name: Pull build data
+        with:
+          name: build-data
+          path: build
+      - name: Push code to gh-pages branch
+        uses: crazy-max/ghaction-github-pages@v3.0.0
+        with:
+          build_dir: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
