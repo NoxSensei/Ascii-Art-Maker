@@ -21,7 +21,7 @@ export class App extends Component<unknown, AppState> {
     constructor(props: unknown) {
         super(props);
         this.state = {
-            scale: 1
+            scale: 5
         };
     }
 
