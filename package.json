@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "./",
   "scripts": {
-    "preinstall": "npm run build:wasm",
     "start": "react-scripts start",
     "build:wasm": "node tools/build-wasm.mjs",
     "build:ui": "react-scripts build",
