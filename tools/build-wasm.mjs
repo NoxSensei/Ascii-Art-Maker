@@ -41,6 +41,7 @@ class WasmBuilder {
             // Source file
             `src/art-maker/art-maker.cpp`,
             `src/art-maker/color-hsl.cpp`,
+            `src/art-maker/sdl-helper.cpp`,
 
             // Output file name (will create .js and .wasm)
             `-o src/art-maker/${fileName}.js`
